@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bwei.dao.GoodsDao">
+		
+	
+	<select id="findAll" resultType="com.bwei.beans.Goods" parameterType="com.bwei.beans.MySort">
+		select g.gid,g.gname,g.gename,g.bid,g.gsid,g.weight,g.price,g.cot,g.message,g.imgurl,gs.gsname,b.bname from tb_goods as g,tb_brand as b,tb_goodskind as gs where 
+		g.gsid = gs.gsid and b.bid = g.bid order by 
+		<if test="price != null and price != ''">
+			${price},
+		</if>
+		<if test="cot != null and cot != ''">
+			${cot},
+		</if>
+		<if test="weight != null and weight != ''">
+			${weight},
+		</if>
+		g.gid asc
+	</select>
+	
+	<insert id="add" parameterType="com.bwei.beans.Goods">
+		insert into tb_goods (gname,gename,bid,gsid,weight,price,cot,message,imgurl) 
+		values 
+		(#{gname},#{gename},#{bid},#{gsid},#{weight},#{price},#{cot},#{message},#{imgurl})
+	</insert>
+	
+	<delete id="del" parameterType="int">
+		delete from tb_goods where gid =#{0}
+	</delete>
+	
+	<select id="toUpd" parameterType="int" resultType="com.bwei.beans.Goods">
+			select g.gid,g.gname,g.gename,g.bid,g.gsid,g.weight,g.price,g.cot,g.message,g.imgurl,gs.gsname,b.bname from tb_goods as g,tb_brand as b,tb_goodskind as gs where 
+		g.gsid = gs.gsid and b.bid = g.bid and g.gid=#{0}
+	</select>
+	
+	<update id="upd" parameterType="com.bwei.beans.Goods">
+		update tb_goods set gname=#{gname},gename=#{gename},bid=#{bid},gsid=#{gsid},weight=#{weight},price=#{price},cot=#{cot},message=#{message},imgurl=#{imgurl} where gid=#{gid}
+	</update>
+</mapper>
